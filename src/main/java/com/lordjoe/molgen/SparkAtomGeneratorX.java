@@ -2,7 +2,6 @@ package com.lordjoe.molgen;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.spark.api.java.JavaRDD;
@@ -11,12 +10,9 @@ import org.openscience.cdk.atomtype.CDKAtomTypeMatcher;
 import org.openscience.cdk.atomtype.IAtomTypeMatcher;
 import org.openscience.cdk.interfaces.IAtomContainer;
 import org.openscience.cdk.interfaces.IChemObjectBuilder;
-import org.openscience.cdk.interfaces.IElement;
-import org.openscience.cdk.interfaces.IMolecularFormula;
 import org.openscience.cdk.silent.SilentChemObjectBuilder;
 import org.openscience.cdk.tools.CDKHydrogenAdder;
 import org.openscience.cdk.tools.SaturationChecker;
-import org.openscience.cdk.tools.manipulator.MolecularFormulaManipulator;
 import org.systemsbiology.xtandem.XTandemUtilities;
 
 import com.lordjoe.distributed.SparkUtilities;
@@ -25,7 +21,6 @@ import com.lordjoe.distributed.spark.accumulators.AbstractLoggingFunction;
 import com.lordjoe.distributed.spark.accumulators.AbstractLoggingFunction2;
 
 import app.FormulaParser;
-import augment.Augmentation;
 import augment.AugmentingGenerator;
 import augment.atom.AtomAugmentation;
 import augment.atom.AtomCanonicalChecker;
@@ -77,6 +72,16 @@ public class SparkAtomGeneratorX implements AugmentingGenerator<IAtomContainer>,
         this.handlers = new ArrayList<Handler<IAtomContainer>>();
         handlers.add(handler);
         this.maxIndex = hCountValidator.getElementSymbols().size() - 1;
+    }
+    
+
+    public SparkAtomGeneratorX(String elementFormula) {
+        List<String> elementSymbols = new ArrayList<String>();
+        this.hCountValidator = new HCountValidator();
+        hCountValidator.setElementSymbols(elementSymbols);
+
+        this.augmentor = new SparkAtomAugmentor(elementSymbols );
+        this.maxIndex = elementSymbols.size() - 1;
     }
 
     public void run() {
@@ -139,15 +144,6 @@ public class SparkAtomGeneratorX implements AugmentingGenerator<IAtomContainer>,
     }
 
 
-    public SparkAtomGeneratorX(String elementFormula) {
-        List<String> elementSymbols = new ArrayList<String>();
-        this.hCountValidator = new HCountValidator();
-        hCountValidator.setElementSymbols(elementSymbols);
-        FormulaParser formulaParser = new FormulaParser(elementFormula);
-
-        this.augmentor = new SparkAtomAugmentor(elementSymbols );
-        this.maxIndex = elementSymbols.size() - 1;
-    }
 
     public int getCount() {
         return count;
@@ -157,36 +153,6 @@ public class SparkAtomGeneratorX implements AugmentingGenerator<IAtomContainer>,
     public void setCount(final int pCount) {
         count = pCount;
     }
-     private int parseFormula(String elementFormula, List<String> elementSymbols) {
-        IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
-        IMolecularFormula formula =
-                MolecularFormulaManipulator.getMolecularFormula(elementFormula, builder);
-        List<IElement> elements = MolecularFormulaManipulator.elements(formula);
-
-        // count the number of non-heavy atoms
-        int hCount = 0;
-        for (IElement element : elements) {
-            String symbol = element.getSymbol();
-            int count = MolecularFormulaManipulator.getElementCount(formula, element);
-            if (symbol.equals("H")) {
-                hCount = count;
-            }
-            else {
-                for (int i = 0; i < count; i++) {
-                    elementSymbols.add(symbol);
-                }
-            }
-        }
-        Collections.sort(elementSymbols);
-
-        return hCount;
-    }
-//
-//    public void run() {
-//        AtomAugmentation initial = augmentor.augment()
-//        run(initial, 0);
-//
-//    }
 
     public static final int MAX_PARITIONS = 800;     // was 120 - lets try more
 
