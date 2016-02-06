@@ -1,10 +1,14 @@
 package com.lordjoe.molgen;
 
-import augment.atom.*;
-import com.lordjoe.distributed.*;
-import org.apache.spark.api.java.*;
+import java.util.List;
 
-import java.util.*;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+
+import com.lordjoe.distributed.SparkUtilities;
+
+import augment.atom.AtomAugmentation;
+import augment.atom.AtomAugmentor;
 
 /**
  * com.lordjoe.molgen.SparkAtomAugmentor

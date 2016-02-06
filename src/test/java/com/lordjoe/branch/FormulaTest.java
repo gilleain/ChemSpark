@@ -38,7 +38,7 @@ public class FormulaTest {
             sparkConf.setMaster("local[*]");
         }
         SparkAccumulatorCountingHandler handler = new SparkAccumulatorCountingHandler(formula);
-        SparkAtomGenerator generator = new SparkAtomGenerator(formula, handler);
+        SparkAtomGeneratorX generator = new SparkAtomGeneratorX(formula, handler);
       //  SparkAccumulatorCountingHandler handler = new SparkAccumulatorCountingHandler(formula);
       //  generator.addHandler(handler);
 

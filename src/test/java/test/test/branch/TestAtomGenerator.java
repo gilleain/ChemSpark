@@ -1,24 +1,30 @@
 package test.test.branch;
 
-import augment.atom.*;
-import com.lordjoe.molgen.*;
-import handler.*;
-import handler.molecule.*;
-import io.*;
-import org.junit.*;
-import org.openscience.cdk.interfaces.*;
-import org.openscience.cdk.silent.*;
+import static io.AtomContainerPrinter.fromString;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-import static io.AtomContainerPrinter.*;
+import org.junit.Test;
+import org.openscience.cdk.interfaces.IAtomContainer;
+import org.openscience.cdk.interfaces.IChemObjectBuilder;
+import org.openscience.cdk.silent.SilentChemObjectBuilder;
+
+import com.lordjoe.molgen.SparkAtomGeneratorX;
+
+import augment.atom.AtomGenerator;
+import handler.Handler;
+import handler.molecule.CountingHandler;
+import handler.molecule.DuplicateHandler;
+import handler.molecule.PrintStreamHandler;
+import io.AtomContainerPrinter;
 
 public class TestAtomGenerator {
 
     private IChemObjectBuilder builder = SilentChemObjectBuilder.getInstance();
 
     private void run(String elementFormula, String fromString, Handler handler) {
-        SparkAtomGenerator gen = new SparkAtomGenerator(elementFormula, handler);
+        SparkAtomGeneratorX gen = new SparkAtomGeneratorX(elementFormula, handler);
         gen.run(AtomContainerPrinter.fromString(fromString, builder));
     }
 
@@ -33,7 +39,7 @@ public class TestAtomGenerator {
 
     private int countFrom(String elementFormula, String fromString) {
         CountingHandler handler = new CountingHandler(false);
-        SparkAtomGenerator gen = new SparkAtomGenerator(elementFormula, handler);
+        SparkAtomGeneratorX gen = new SparkAtomGeneratorX(elementFormula, handler);
         gen.run(fromString(fromString, builder));
         return handler.getCount();
     }
@@ -64,24 +70,24 @@ public class TestAtomGenerator {
 
     @Test
     public void testC4H8() {
-        SparkAtomGenerator gen = new SparkAtomGenerator("C4H8", new PrintStreamHandler(System.out));
+        SparkAtomGeneratorX gen = new SparkAtomGeneratorX("C4H8", new PrintStreamHandler(System.out));
         gen.run();
     }
 
     @Test
     public void testCH5N() {
-        SparkAtomGenerator gen = new SparkAtomGenerator("CH5N", new PrintStreamHandler(System.out));
+        SparkAtomGeneratorX gen = new SparkAtomGeneratorX("CH5N", new PrintStreamHandler(System.out));
         gen.run();
     }
 
     @Test
     public void testCH5NFromAtom() {
-        new SparkAtomGenerator("CH5N", new PrintStreamHandler(System.out)).run();
+        new SparkAtomGeneratorX("CH5N", new PrintStreamHandler(System.out)).run();
     }
 
     @Test
     public void testC2H2N2FromAtom() {
-        new SparkAtomGenerator("C2H2N2", new PrintStreamHandler(System.out)).run();
+        new SparkAtomGeneratorX("C2H2N2", new PrintStreamHandler(System.out)).run();
     }
 
     private void printDups(DuplicateHandler handler) {

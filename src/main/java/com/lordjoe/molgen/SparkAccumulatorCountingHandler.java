@@ -1,9 +1,12 @@
 package com.lordjoe.molgen;
 
-import com.lordjoe.distributed.spark.accumulators.*;
-import handler.*;
-import org.apache.spark.*;
-import org.openscience.cdk.interfaces.*;
+import org.apache.spark.Accumulator;
+import org.openscience.cdk.interfaces.IAtomContainer;
+
+import com.lordjoe.distributed.spark.accumulators.AccumulatorUtilities;
+import com.lordjoe.distributed.spark.accumulators.ISparkAccumulators;
+
+import handler.Handler;
 
 /**
  * com.lordjoe.molgen.SparkAccumulatorCountingHandler
