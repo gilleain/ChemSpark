@@ -1,5 +1,7 @@
 package com.lordjoe.distributed;
 
+import com.lordjoe.utilities.JarHandler;
+
 import java.io.*;
 import java.util.*;
 import java.util.zip.*;
@@ -12,58 +14,58 @@ import java.util.zip.*;
  */
 public class SparkDeployer {
 
-    String foo = "lib/jsch-0.1.44-1.jar\n"+
-            "lib/commons-cli-1.2.jar\n"+
-            "lib/commons-logging-1.0.3.jar\n"+
-            "lib/commons-el-1.0.jar\n"+
-            "lib/commons-io-2.4.jar\n"+
-            "lib/guava-14.0.1.jar\n"+
-            "lib/httpclient-4.0.3.jar\n"+
-            "lib/httpcore-4.0.1.jar\n"+
-            "lib/xpp3-1.1.4c.jar\n"+
-            "lib/mail-1.4.jar\n"+
-            "lib/activation-1.1.jar\n"+
-            "lib/curator-recipes-2.4.0.jar\n"+
-            "lib/curator-framework-2.4.0.jar\n"+
-            "lib/curator-client-2.4.0.jar\n"+
-            "lib/zookeeper-3.4.5.jar\n"+
-            "lib/jline-0.9.94.jar\n"+
-            "lib/commons-lang3-3.3.2.jar\n"+
-            "lib/jul-to-slf4j-1.7.5.jar\n"+
-            "lib/compress-lzf-1.0.0.jar\n"+
-            "lib/lz4-1.2.0.jar\n"+
-            "lib/chill_2.10-0.3.6.jar\n"+
-            "lib/scala-library-2.10.4.jar\n"+
-            "lib/chill-java-0.3.6.jar\n"+
-            "lib/kryo-2.21.jar\n"+
-            "lib/reflectasm-1.07-shaded.jar\n"+
-            "lib/minlog-1.2.jar\n"+
-            "lib/objenesis-1.2.jar\n"+
-            "lib/akka-remote_2.10-2.2.3-shaded-protobuf.jar\n"+
-            "lib/akka-actor_2.10-2.2.3-shaded-protobuf.jar\n"+
-            "lib/config-1.0.2.jar\n"+
-            "lib/protobuf-java-2.4.1-shaded.jar\n"+
-            "lib/uncommons-maths-1.2.2a.jar\n"+
-            "lib/akka-slf4j_2.10-2.2.3-shaded-protobuf.jar\n"+
-            "lib/json4s-jackson_2.10-3.2.10.jar\n"+
-            "lib/json4s-core_2.10-3.2.10.jar\n"+
-            "lib/json4s-ast_2.10-3.2.10.jar\n"+
-            "lib/scalap-2.10.0.jar\n"+
-            "lib/scala-compiler-2.10.0.jar\n"+
-            "lib/scala-reflect-2.10.0.jar\n"+
-            "lib/colt-1.2.0.jar\n"+
-            "lib/concurrent-1.3.4.jar\n"+
-            "lib/mesos-0.18.1-shaded-protobuf.jar\n"+
-            "lib/stream-2.7.0.jar\n"+
-            "lib/metrics-core-3.0.0.jar\n"+
-            "lib/metrics-jvm-3.0.0.jar\n"+
-            "lib/metrics-json-3.0.0.jar\n"+
-            "lib/metrics-graphite-3.0.0.jar\n"+
-            "lib/tachyon-client-0.5.0.jar\n"+
-            "lib/tachyon-0.5.0.jar\n"+
-            "lib/pyrolite-2.0.1.jar\n"+
-            "lib/py4j-0.8.2.1.jar\n"+
-            "lib/commons-collections4-4.0.jar" ;
+    String foo = "lib/jsch-0.1.44-1.jar\n" +
+            "lib/commons-cli-1.2.jar\n" +
+            "lib/commons-logging-1.0.3.jar\n" +
+            "lib/commons-el-1.0.jar\n" +
+            "lib/commons-io-2.4.jar\n" +
+            "lib/guava-14.0.1.jar\n" +
+            "lib/httpclient-4.0.3.jar\n" +
+            "lib/httpcore-4.0.1.jar\n" +
+            "lib/xpp3-1.1.4c.jar\n" +
+            "lib/mail-1.4.jar\n" +
+            "lib/activation-1.1.jar\n" +
+            "lib/curator-recipes-2.4.0.jar\n" +
+            "lib/curator-framework-2.4.0.jar\n" +
+            "lib/curator-client-2.4.0.jar\n" +
+            "lib/zookeeper-3.4.5.jar\n" +
+            "lib/jline-0.9.94.jar\n" +
+            "lib/commons-lang3-3.3.2.jar\n" +
+            "lib/jul-to-slf4j-1.7.5.jar\n" +
+            "lib/compress-lzf-1.0.0.jar\n" +
+            "lib/lz4-1.2.0.jar\n" +
+            "lib/chill_2.10-0.3.6.jar\n" +
+            "lib/scala-library-2.10.4.jar\n" +
+            "lib/chill-java-0.3.6.jar\n" +
+            "lib/kryo-2.21.jar\n" +
+            "lib/reflectasm-1.07-shaded.jar\n" +
+            "lib/minlog-1.2.jar\n" +
+            "lib/objenesis-1.2.jar\n" +
+            "lib/akka-remote_2.10-2.2.3-shaded-protobuf.jar\n" +
+            "lib/akka-actor_2.10-2.2.3-shaded-protobuf.jar\n" +
+            "lib/config-1.0.2.jar\n" +
+            "lib/protobuf-java-2.4.1-shaded.jar\n" +
+            "lib/uncommons-maths-1.2.2a.jar\n" +
+            "lib/akka-slf4j_2.10-2.2.3-shaded-protobuf.jar\n" +
+            "lib/json4s-jackson_2.10-3.2.10.jar\n" +
+            "lib/json4s-core_2.10-3.2.10.jar\n" +
+            "lib/json4s-ast_2.10-3.2.10.jar\n" +
+            "lib/scalap-2.10.0.jar\n" +
+            "lib/scala-compiler-2.10.0.jar\n" +
+            "lib/scala-reflect-2.10.0.jar\n" +
+            "lib/colt-1.2.0.jar\n" +
+            "lib/concurrent-1.3.4.jar\n" +
+            "lib/mesos-0.18.1-shaded-protobuf.jar\n" +
+            "lib/stream-2.7.0.jar\n" +
+            "lib/metrics-core-3.0.0.jar\n" +
+            "lib/metrics-jvm-3.0.0.jar\n" +
+            "lib/metrics-json-3.0.0.jar\n" +
+            "lib/metrics-graphite-3.0.0.jar\n" +
+            "lib/tachyon-client-0.5.0.jar\n" +
+            "lib/tachyon-0.5.0.jar\n" +
+            "lib/pyrolite-2.0.1.jar\n" +
+            "lib/py4j-0.8.2.1.jar\n" +
+            "lib/commons-collections4-4.0.jar";
 
     public static final String[] EXCLUDED_JARS_PREFIXES = {
             //          core-3.1.1.jar,\
@@ -84,10 +86,10 @@ public class SparkDeployer {
             "compress-",
             "httpclient-",
             "httpcore-",
-             "objenesis-",
-                  "zookeeper-",
+            "objenesis-",
+            "zookeeper-",
             "javax",
-              //     "commons-logging-",
+            //     "commons-logging-",
             //      "commons-lang-",
             "commons-codec-",
             "commons-httpclient-",
@@ -117,15 +119,15 @@ public class SparkDeployer {
             "mockito-",
             "oro-",
             "mina-",
-            "jersey",
+        //    "jersey",
             "kfs-",
             "jetty-",
             "snappy",
             "servlet",
-            "google-",
-            "parquet-",
+          //  "google-",
+           "parquet-",
             "jfreechart",
-             "core",
+            "core",
             "gdata",
             "netty",
             //       "guava",
@@ -223,29 +225,43 @@ public class SparkDeployer {
     public static File[] filterClassPath(String[] pathItems, String javaHome) {
         readExcludedProperties();
 
+
         List<File> holder = new ArrayList<File>();
         List<String> pathholder = new ArrayList<String>();
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < pathItems.length; i++) {
             String item = pathItems[i];
             String jarName = new File(item).getName();
-            if(jarName.contains("org/openscience.cdk"))  {
+            if(jarName.endsWith("-sources.jar")) {
+                System.out.println("excluding " + item);
+                continue;
+
+            }
+            if (jarName.contains("org/openscience.cdk")) {
                 pathholder.add(item);
                 continue;
             }
             if (jarName.contains("guava"))
                 jarName = new File(item).getName();
-            if (".".equals(item))
+            if (".".equals(item)) {
+                System.out.println("excluding " + item);
                 continue;
+            }
             if (item.contains(javaHome))
                 continue;
-            if (EXCLUDED_JARS.contains(item))
-                continue;
-            if (EXCLUDED_JARS.contains(jarName))
-                continue;
+            if (EXCLUDED_JARS.contains(item)){
+                    System.out.println("excluding in excluded jars  " + item);
+                    continue;
+                }
+            if (EXCLUDED_JARS.contains(jarName)){
+                    System.out.println("excluding in excluded jars " + item);
+                    continue;
+                }
             File itemFile = new File(item);
-            if (!itemFile.exists())
-                continue;
+            if (!itemFile.exists()){
+                    System.out.println("excluding cannot find " + item);
+                    continue;
+                }
             if (itemFile.isFile()) {
                 pathholder.add(item);
             }
@@ -262,20 +278,28 @@ public class SparkDeployer {
             if (jarName.contains("guava"))
                 jarName = itemFile.getName(); // break here
 
-            if (".".equals(item))
-                continue;
-            if (inExcludedJars(jarName))
-                continue;
+            if (".".equals(item)){
+                    System.out.println("excluding .  " + item);
+                    continue;
+                }
+            if (inExcludedJars(jarName)){
+                    System.out.println("excluding in excluded jars  " + item);
+                    continue;
+                }
             if (item.contains(javaHome))
                 continue;
             if (jarName.startsWith("hadoop"))
                 jarName = itemFile.getName();
 
-            if (HADOOP_HOME.contains(javaHome))
-                continue;
+            if (HADOOP_HOME.contains(javaHome)){
+                    System.out.println("excluding in hadoop home " + item);
+                    continue;
+                }
 
-            if (applyRulesToExclude(item, jarName))
-                continue;
+            if (applyRulesToExclude(item, jarName))    {
+                      System.out.println("by rule  " + item);
+                    continue;
+                }
 
             if (!itemFile.exists())
                 continue;
@@ -309,10 +333,15 @@ public class SparkDeployer {
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < EXCLUDED_JARS_PREFIXES.length; i++) {
             String testPrefix = EXCLUDED_JARS_PREFIXES[i];
-            if (item.startsWith(testPrefix))
-                return true;  // exclude
-            if (jarName.startsWith(testPrefix))
-                return true;  // exclude
+            if (item.startsWith(testPrefix)) {
+                System.out.println("excluding in excluded jars prefix  " + item);
+                return true;  // exclude;
+            }
+
+            if (jarName.startsWith(testPrefix)) {
+                System.out.println("excluding in excluded jars prefix  " + item);
+                return true;  // exclude;
+            }
 
         }
         return false; // OK
@@ -329,8 +358,7 @@ public class SparkDeployer {
                 //noinspection ForLoopReplaceableByForEach
                 Collections.addAll(EXCLUDED_JARS, props);
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -392,18 +420,21 @@ public class SparkDeployer {
         System.out.println(cmd);
         try {
             Runtime.getRuntime().exec(cmd);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return jarFile;
     }
 
     public static void copyLibraries(ZipOutputStream out, File[] libs) throws IOException {
+        Set<String> used = new HashSet<>();
         //noinspection ForLoopReplaceableByForEach
         for (int i = 0; i < libs.length; i++) {
             File lib = libs[i];
             final String name = "lib/" + lib.getName();
+            if (used.contains(name))
+                continue;
+            used.add(name);
             System.out.println(name);
             ZipEntry ze = new ZipEntry(name);
             out.putNextEntry(ze);
@@ -444,8 +475,7 @@ public class SparkDeployer {
             }
             srcFile.close();
             return true;
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             return (false);
         }
     }
@@ -473,11 +503,9 @@ public class SparkDeployer {
             }
             return (false);
             // failure
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             return (false); // browser disallows
-        }
-        catch (SecurityException ex) {
+        } catch (SecurityException ex) {
             return (false); // browser disallows
         }
     }
@@ -498,12 +526,10 @@ public class SparkDeployer {
             String[] pathItems;
             if (classpath.contains(";")) {
                 pathItems = classpath.split(";");
-            }
-            else {
+            } else {
                 if (classpath.contains(":")) {
                     pathItems = classpath.split(":");   // Linux stlye
-                }
-                else {
+                } else {
                     //noinspection UnnecessaryLocalVariable
                     String[] items = {classpath};
                     pathItems = items; // only 1 I guess
@@ -520,8 +546,7 @@ public class SparkDeployer {
             out.flush();
             out.close();
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
 
         }
@@ -542,12 +567,10 @@ public class SparkDeployer {
             String[] pathItems;
             if (classpath.contains(";")) {
                 pathItems = classpath.split(";");
-            }
-            else {
+            } else {
                 if (classpath.contains(":")) {
                     pathItems = classpath.split(":");   // Linux stlye
-                }
-                else {
+                } else {
                     //noinspection UnnecessaryLocalVariable
                     String[] items = {classpath};
                     pathItems = items; // only 1 I guess
@@ -573,8 +596,7 @@ public class SparkDeployer {
             out.flush();
             out.close();
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
 
         }
@@ -586,7 +608,7 @@ public class SparkDeployer {
         return s + "/" + name;
     }
 
-    private static void copyLibraryDirectory(final String s, final File dir, final ZipOutputStream pOut, Set<String> existing) throws IOException {
+    public static void copyLibraryDirectory(final String s, final File dir, final ZipOutputStream pOut, Set<String> existing) throws IOException {
         File[] list = dir.listFiles();
         if (list == null) return;
         //noinspection ForLoopReplaceableByForEach
@@ -595,8 +617,7 @@ public class SparkDeployer {
             if (file.isDirectory()) {
                 final String np = nextPath(s, file.getName());
                 copyLibraryDirectory(np, file, pOut, existing);
-            }
-            else {
+            } else {
                 final String np = nextPath(s, file.getName());
                 // prevent duplicates
                 if (!existing.contains(np)) {
@@ -605,8 +626,7 @@ public class SparkDeployer {
                     copyFile(file, pOut);
                     pOut.closeEntry();
                     existing.add(np);
-                }
-                else {
+                } else {
                     System.out.println(np);
                 }
             }
@@ -614,7 +634,7 @@ public class SparkDeployer {
     }
 
 
-    private static void copySpecifiesLibraryDirectory(final String s, final File dir, final ZipOutputStream pOut, Set<String> paths) throws IOException {
+    public static void copySpecifiesLibraryDirectory(final String s, final File dir, final ZipOutputStream pOut, Set<String> paths) throws IOException {
         File[] list = dir.listFiles();
         if (list == null) return;
         //noinspection ForLoopReplaceableByForEach
@@ -623,8 +643,7 @@ public class SparkDeployer {
             if (file.isDirectory()) {
                 final String np = nextPath(s, file.getName());
                 copySpecifiesLibraryDirectory(np, file, pOut, paths);
-            }
-            else {
+            } else {
                 if (!paths.contains(s))
                     continue;
                 final String np = nextPath(s, file.getName());
@@ -662,11 +681,53 @@ public class SparkDeployer {
         return deployDir;
     }
 
+
+    public static void deployZipfileToJar(InputStream is, ZipOutputStream out)
+    {
+        try {
+            ZipInputStream in = new ZipInputStream(is);
+            ZipEntry nextEntry = in.getNextEntry();
+            if(nextEntry.isDirectory())   {
+                deployDirectoryToZipfileToJar(nextEntry.getName(),  in,   out);
+            }
+            else {
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+
+            }
+        }
+    }
+
+    private static void deployDirectoryToZipfileToJar(String dir, ZipInputStream in, ZipOutputStream out) {
+        try {
+            ZipEntry nextEntry = in.getNextEntry();
+            if(nextEntry.isDirectory())   {
+                deployDirectoryToZipfileToJar(dir + "/" + nextEntry.getName(),  in,   out);
+            }
+            else {
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+
+        }
+
+    }
+
+
     public static void main(String[] args) {
         String jarName = "FooBar.jar";
-         if (args.length > 0)
+        if (args.length > 0)
             jarName = args[0];
         makeSparkJar(jarName);
 
     }
-}
+
+ }
