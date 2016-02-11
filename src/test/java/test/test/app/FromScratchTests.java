@@ -21,17 +21,17 @@ public class FromScratchTests {
         return; // added Slewis
     }
     
-     @Test
+    // @Test
     public void smilesFromScratchTest() throws Exception {
         fromScratchTest("SMI");
     }
     
-    @Test
+  //  @Test
     public void signaturesFromScratchTest() throws Exception {
         fromScratchTest("SIG");
     }
 
-     @Test
+   //  @Test
     public void sdfFromScratchTest() throws Exception {
         fromScratchTest("SDF");
     }

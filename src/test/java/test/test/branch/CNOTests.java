@@ -1,11 +1,10 @@
 package test.test.branch;
 
 
-import com.lordjoe.branch.*;
 import junit.framework.Assert;
 import org.junit.Test;
 
-public class CNOTests extends FormulaTest {
+public class CNOTests  extends SparkFormulaTest {
 
     @Test
     public void cH5NOTest() {

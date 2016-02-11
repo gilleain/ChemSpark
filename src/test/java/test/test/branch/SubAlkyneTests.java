@@ -1,10 +1,10 @@
 package test.test.branch;
 
-import com.lordjoe.branch.*;
+
 import junit.framework.Assert;
 import org.junit.Test;
 
-public class SubAlkyneTests extends FormulaTest {
+public class SubAlkyneTests  extends SparkFormulaTest {
 
     @Test
     public void c3H2Test() {
