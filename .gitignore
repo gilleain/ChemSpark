@@ -18,3 +18,4 @@ hs_err_pid*
 /target/classes
 /target/test-classes
 /libClasses
+/.oracle_jre_usage/*.timestamp

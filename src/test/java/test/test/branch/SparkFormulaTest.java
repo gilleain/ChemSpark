@@ -32,6 +32,7 @@ public class SparkFormulaTest {
 
         SparkUtilities.readSparkPropertiesResource("/SparkLocalCluster.properties");
 
+        //  take a look here
         Properties sparkProperties = SparkUtilities.getSparkProperties();
 
         SparkConf sparkConf = new SparkConf();

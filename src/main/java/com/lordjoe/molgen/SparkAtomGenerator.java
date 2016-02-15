@@ -106,12 +106,16 @@ public class SparkAtomGenerator implements AugmentingGenerator<IAtomContainer> {
         IsMoleculeConnected moleculeConnected = new IsMoleculeConnected(elementFormula,maxIndex);
         aug1 = aug1.filter(moleculeConnected);
 
-        aug1 = SparkUtilities.persistAndCount("After Connected Filter", aug1, counts);
+          aug1 = SparkUtilities.persistAndCount("After Connected Filter", aug1, counts);
         theCount = counts[0];
-//        List<AtomAugmentation> collect = aug1.collect();
-//        for (AtomAugmentation atomAugmentation : collect) {
-//            System.out.println(CDKUtilities.atomAugmentationToString(atomAugmentation));
-//        }
+        List<AtomAugmentation> collect = aug1.collect();
+        int count2 = collect.size();
+        if(theCount != count2)
+            throw new IllegalStateException("different Answers");
+
+        for (AtomAugmentation atomAugmentation : collect) {
+            System.out.println(CDKUtilities.atomAugmentationToString(atomAugmentation));
+        }
 
         setCounter((int) theCount);
         System.out.println("Count is " + theCount);
