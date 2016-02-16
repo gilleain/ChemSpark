@@ -73,8 +73,16 @@ public class SparkAtomGenerator implements AugmentingGenerator<IAtomContainer> {
     }
 
     public void run(IAtomContainer initial) {
-        ElementConstraints remaining = initialConstraints;    // TODO
+        ElementConstraints remaining = getRemaining(initial, initialConstraints);
         run(new AtomAugmentation(initial, remaining), 0);
+    }
+    
+    private ElementConstraints getRemaining(IAtomContainer initial, ElementConstraints initialConstraints) {
+        String[] toRemove = new String[initial.getAtomCount()];
+        for (int index = 0; index < initial.getAtomCount(); index++) {
+            toRemove[index] = initial.getAtom(index).getSymbol();
+        }
+        return new ElementConstraints(initialConstraints.getMap(), toRemove);
     }
 
     public static final int MAX_PARITIONS = 800;     // was 120 - lets try more
@@ -261,7 +269,7 @@ public class SparkAtomGenerator implements AugmentingGenerator<IAtomContainer> {
                 return ret;
             }
 
-            List<AtomAugmentation> augment = augmentor.augment((AtomAugmentation) t);
+            List<AtomAugmentation> augment = augmentor.augment(t);
 //               if (false && AtomGenerator.VERBOSE)
 //                    AtomGenerator.showArrayAndIndex(index, augment);
 
